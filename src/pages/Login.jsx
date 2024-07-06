@@ -6,7 +6,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 const Login = () => {
     const [input, setInput] = useState();
-    const { loading, error, dispatch } = useContext(AuthContext);
+    const { loading, error, dispatch, user } = useContext(AuthContext);
     const navigate = useNavigate();
     const handleInput = (e) => {
         setInput({ ...input, [e.target.id]: e.target.value });
@@ -17,10 +17,12 @@ const Login = () => {
 
         try {
             const res = await Axios.post('/auth/login', input);
+            // console.log(res.data)
             if (res.status === 200) {
                 dispatch({ type: 'LOGIN_SUCCESS', payload: res.data });
                 localStorage.setItem('token', JSON.stringify(res.data.token));
                 navigate('/');
+                // console.log(user)
             }
             console.log(res.data);
         } catch (error) {

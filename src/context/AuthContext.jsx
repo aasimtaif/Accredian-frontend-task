@@ -1,5 +1,5 @@
 import { createContext, useEffect, useReducer } from "react";
-
+import { Axios } from "../utils/api";
 const INITIAL_STATE = {
     user: JSON.parse(localStorage.getItem("user")) || null,
     loading: false,
@@ -40,6 +40,7 @@ const AuthReducer = (state, action) => {
                 error: null,
             };
         case "UPDATE_USER":
+            localStorage.setItem("user", JSON.stringify(action.payload));
             return {
                 ...state,
                 user: {
@@ -54,7 +55,20 @@ const AuthReducer = (state, action) => {
 
 export const AuthContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
-
+    const updateUser = async () => {
+        try {
+            const res = await Axios.get("/users/" + state.user.id);
+            const { purchaseList, ...user } = res.data;
+            let coursesPaid = []
+            purchaseList.forEach(purchase => {
+                coursesPaid.push(purchase.courseId)
+            })
+            console.log(coursesPaid, user)
+            dispatch({ type: "UPDATE_USER", payload: { ...user, coursesPaid } });
+        } catch (err) {
+            console.log(err)
+        }
+    };
     useEffect(() => {
         localStorage.setItem("user", JSON.stringify(state.user));
     }, [state.user]);
@@ -66,6 +80,7 @@ export const AuthContextProvider = ({ children }) => {
                 loading: state.loading,
                 error: state.error,
                 dispatch,
+                updateUser
             }}
         >
             {children}

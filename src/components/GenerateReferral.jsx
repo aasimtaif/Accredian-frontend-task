@@ -7,7 +7,7 @@ function GenerateReferral() {
     const { user } = useContext(AuthContext)
     const handleReferral = () => {
         try {
-            Axios.get('/referral/' + user.details.id)
+            Axios.get('/referral/' + user.id)
                 .then(res => {
                     console.log(res.data)
                     setReferral(res.data)

@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Axios } from '../utils/api'
 import Modal from './Modal';
-
+import { AuthContext } from '../context/AuthContext';
 function CourseList() {
     const [data, setData] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState(null);
 
+    const { user } = useContext(AuthContext);
     const openModal = (course) => {
         setSelectedCourse(course);
         setIsModalOpen(true);
@@ -38,8 +39,9 @@ function CourseList() {
                         <p className="text-red-500 mb-6">Discount on using Referral: {course.refrerralDiscount}%</p>
                         <button className="bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-blue-600 transition-colors duration-300"
                             onClick={() => openModal(course)}
+                            disabled={user && user.coursesPaid && user?.coursesPaid?.includes(course.id)}
                         >
-                            Buy
+                            { user && user.coursesPaid && user?.coursesPaid?.includes(course.id) ? 'Already Bought' : 'Buy Course'}
                         </button>
                     </div>
                 ))}

@@ -8,14 +8,14 @@ const Navbar = () => {
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
-
+    console.log(user)
     return (
-        <nav className="bg-gray-800 p-4">
+        <nav className="bg-gray-800 p-4 fixed top-0 w-full shadow-md">
             <div className="container mx-auto flex justify-between items-center">
                 <div className="text-white text-xl">MyApp</div>
                 <div className='flex gap-5'>
                     <div className="hidden md:flex space-x-4">
-                        <NavLink to="/home" className="text-gray-300 hover:text-1xl hover:text-white">Home</NavLink>
+                        <NavLink to="/" className="text-gray-300 hover:text-1xl hover:text-white">Home</NavLink>
                         {user ?
                             <NavLink to="/course" className="text-gray-300 hover:text-1xl hover:text-white">Account</NavLink>
                             :
@@ -33,7 +33,7 @@ const Navbar = () => {
                             className="w-5 h-5 rounded-full"
                         />
                         <p className="text-gray-800 text-sm font-semibold">
-                            2
+                            {user?.coins}
                         </p>
                     </div>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-white">
